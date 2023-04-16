@@ -18,6 +18,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+
     @Override
     public AuthenticationResponse register(RegisterRequest request) {
         var user = User.builder()
@@ -36,16 +37,26 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
 
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
-        var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getEmail(),
+                            request.getPassword()
+                    )
+            );
+
+            var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
+
+            var jwtToken = jwtService.generateToken(user);
+
+            return AuthenticationResponse.builder()
+                    .token(jwtToken)
+                    .build();
+        } catch (Exception ex){
+            return AuthenticationResponse.builder()
+                    .token(ex.getMessage()+", Please Login With Correct Email & Password")
+                    .build();
+        }
+
     }
 }

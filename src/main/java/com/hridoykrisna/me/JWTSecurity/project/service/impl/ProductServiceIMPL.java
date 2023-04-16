@@ -1,5 +1,6 @@
 package com.hridoykrisna.me.JWTSecurity.project.service.impl;
 
+import com.hridoykrisna.me.JWTSecurity.auth.DB.Session;
 import com.hridoykrisna.me.JWTSecurity.project.model.Product;
 import com.hridoykrisna.me.JWTSecurity.project.model.dto.ProductDto;
 import com.hridoykrisna.me.JWTSecurity.project.model.dto.ResponseDto;
@@ -23,6 +24,7 @@ public class ProductServiceIMPL implements ProductService {
     @Override
     public ResponseDto save(ProductDto productDto) {
         Product product = modelMapper.map(productDto, Product.class);
+        product.setCreatedBy(Session.user.get().getId());
         product = productRepo.save(product);
 
         if (product != null) {
@@ -32,8 +34,8 @@ public class ProductServiceIMPL implements ProductService {
     }
 
     @Override
-    public ResponseDto update(Long Id, ProductDto productDto) {
-        Product product = productRepo.findByIdAndIsActiveTrue(Id);
+    public ResponseDto update(ProductDto productDto) {
+        Product product = productRepo.findByIdAndIsActiveTrue(productDto.getId());
         if (product != null) {
             modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
             modelMapper.map(productDto, product);
@@ -47,7 +49,7 @@ public class ProductServiceIMPL implements ProductService {
     }
 
     @Override
-    public ResponseDto delete(Long Id) {
+    public ResponseDto delete(int Id) {
         Product product = productRepo.findByIdAndIsActiveTrue(Id);
         if (product != null) {
             product.setIsActive(false);
@@ -61,7 +63,7 @@ public class ProductServiceIMPL implements ProductService {
     }
 
     @Override
-    public ResponseDto getDetails(Long Id) {
+    public ResponseDto getDetails(int Id) {
         Product product = productRepo.findByIdAndIsActiveTrue(Id);
         if (product != null) {
             return ResponseBuilder.getSuccessMessage(HttpStatus.OK, "Successful", product);

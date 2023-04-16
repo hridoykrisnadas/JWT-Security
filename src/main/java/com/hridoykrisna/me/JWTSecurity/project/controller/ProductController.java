@@ -25,20 +25,20 @@ public class ProductController {
     }
 
     @PutMapping(UrlConstraint.ProductManagement.UPDATE)
-    public ResponseDto updateProduct(@PathVariable("id") long id, @Valid @RequestBody ProductDto productDto, BindingResult result) {
+    public ResponseDto updateProduct( @Valid @RequestBody ProductDto productDto, BindingResult result) {
         if (result.hasErrors()) {
             return ResponseBuilder.getFailureMessage(result, "Bean Binding Error");
         }
-        return productService.update(id, productDto);
+        return productService.update(productDto);
     }
 
     @DeleteMapping(UrlConstraint.ProductManagement.DELETE)
-    public ResponseDto deleteProduct(@PathVariable("id") long id) {
+    public ResponseDto deleteProduct(@PathVariable("id") int id) {
         return productService.delete(id);
     }
 
     @GetMapping(UrlConstraint.ProductManagement.DETAILS)
-    public ResponseDto getProduct(@PathVariable("id") long id) {
+    public ResponseDto getProduct(@PathVariable("id") int id) {
         return productService.getDetails(id);
     }
 

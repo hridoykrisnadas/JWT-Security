@@ -16,7 +16,7 @@ public class UrlConstraint {
     public static class ProductManagement {
         public static final String ROOT = API+VERSION+"/product";
         public static final String CREATE = "/create";
-        public static final String UPDATE = "/update/{id}";
+        public static final String UPDATE = "/update";
         public static final String DETAILS = "/details/{id}";
         public static final String DELETE = "/delete/{id}";
         public static final String ALL_PRODCUTS = "/all-product";
