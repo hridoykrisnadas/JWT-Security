@@ -35,6 +35,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
@@ -42,7 +43,6 @@ public class AuthServiceImpl implements AuthService {
                 )
         );
         var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
-
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
