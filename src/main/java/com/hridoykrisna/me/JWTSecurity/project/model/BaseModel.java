@@ -4,6 +4,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
 import jakarta.persistence.*;
+
+import java.sql.Timestamp;
 import java.util.Date;
 
 @MappedSuperclass
@@ -11,7 +13,7 @@ import java.util.Date;
 public abstract class BaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
     @Column(updatable = false)
     private int createdBy;
     @Column(updatable = false)
