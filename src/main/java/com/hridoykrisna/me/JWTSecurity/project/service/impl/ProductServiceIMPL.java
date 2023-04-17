@@ -12,6 +12,7 @@ import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
 import java.util.*;
 
 @Service
@@ -24,7 +25,8 @@ public class ProductServiceIMPL implements ProductService {
     @Override
     public ResponseDto save(ProductDto productDto) {
         Product product = modelMapper.map(productDto, Product.class);
-        product.setCreatedBy(Session.user.get().getId());
+        if (Session.user.isPresent())
+            product.setCreatedBy(Session.user.get().getId());
         product = productRepo.save(product);
 
         if (product != null) {
